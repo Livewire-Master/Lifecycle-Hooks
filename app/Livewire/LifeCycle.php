@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use Illuminate\Http\Request;
 use Livewire\Component;
 
 class LifeCycle extends Component
@@ -29,6 +28,20 @@ class LifeCycle extends Component
     public ?string $uuid;
 
     /**
+     * Last boot Time
+     *
+     * @var int
+     */
+    public int $boot_time;
+
+    /**
+     * Boot function execution count
+     *
+     * @var int
+     */
+    public int $boot_calls = 0;
+
+    /**
      * Mount the component
      *
      * @param string|null $uuid
@@ -42,5 +55,18 @@ class LifeCycle extends Component
         $this->creation_time = time();
         $this->mount_calls++;
         $this->uuid = $uuid;
+    }
+
+    /**
+     * Boot the component
+     *
+     * @return void
+     */
+    public function boot(): void
+    {
+        // executes on beginning of every request (initial, subsequently)
+
+        $this->boot_time = time();
+        $this->boot_calls++;
     }
 }

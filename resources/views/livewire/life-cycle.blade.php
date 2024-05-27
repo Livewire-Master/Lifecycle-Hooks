@@ -3,6 +3,10 @@
         Lifecycle Hooks
     </h1>
     <hr>
+    <button wire:click.prevent="$refresh">
+        Refresh
+    </button>
+    <hr>
     <h4>
         Mount Hook
     </h4>
@@ -17,6 +21,12 @@
     </p>
     <hr>
     <h4>
-        Mount Hook
+        Boot Hook
     </h4>
+    <p>
+        Last Boot Time: {{ $boot_time }}
+    </p>
+    <p>
+        Boot Calls: {{ $boot_calls }} times
+    </p>
 </div>
