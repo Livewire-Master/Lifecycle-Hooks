@@ -1,7 +1,7 @@
 <?php
 
+use App\Livewire\LifeCycle;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', LifeCycle::class)->name('page.lifecycle');
+Route::get('/mount/{uuid}', LifeCycle::class)->name('page.lifecycle');
