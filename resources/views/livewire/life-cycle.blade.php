@@ -29,4 +29,59 @@
     <p>
         Boot Calls: {{ $boot_calls }} times
     </p>
+    <hr>
+    <h4>
+        Update Hooks
+    </h4>
+    <div>
+        <label for="input-user_id">
+            User ID
+        </label>
+        <br>
+        <input
+            id="input-user_id"
+            type="text"
+            name="user_id"
+            wire:model.blur="user_id"
+        >
+    </div>
+    <br>
+    <div>
+        <label for="input-username">
+            Username
+        </label>
+        <br>
+        <input
+            id="input-username"
+            type="text"
+            name="username"
+            wire:model.blur="username"
+        >
+        @error('username')
+        <p style="color: indianred; font-size: 0.8rem">
+            {{ $message }}
+        </p>
+        @enderror
+    </div>
+    <br>
+    <div>
+        <label for="input-email">
+            Email
+        </label>
+        <br>
+        <input
+            id="input-email"
+            type="text"
+            name="email"
+            wire:model.blur="email"
+        >
+        @error('email')
+        <p style="color: indianred; font-size: 0.8rem">
+            {{ $message }}
+        </p>
+        @enderror
+    </div>
+    <br>
+    <br>
+    <br>
 </div>
