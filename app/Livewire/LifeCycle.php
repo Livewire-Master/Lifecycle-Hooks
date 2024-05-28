@@ -192,7 +192,10 @@ class LifeCycle extends Component
     public function hydrate(): void
     {
         // Runs at the beginning of every "subsequent" request.
-        $this->post = PostDto::fromArray($this->post);
+        if (is_array($this->post))
+        {
+            $this->post = PostDto::fromArray($this->post);
+        }
     }
 
     /**
@@ -206,7 +209,7 @@ class LifeCycle extends Component
     public function dehydrate(): void
     {
         // Runs at the end of every single request.
-        $this->post = $this->post->toArray();
+        $this->post = $this->post?->toArray();
     }
 
     /**
@@ -216,7 +219,7 @@ class LifeCycle extends Component
      */
     public function magic(): void
     {
-        $this->post->like();
+        $this->post?->like();
     }
 
     /**
