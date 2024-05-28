@@ -81,6 +81,22 @@
         </p>
         @enderror
     </div>
+    <hr>
+    <h4>
+        Hydrate & Dehydrate Hooks
+    </h4>
+    <p>
+        Post Title: {{ $post?->title ?? 'not set' }}
+    </p>
+    <p>
+        Post Caption: {{ $post?->caption ?? 'not set' }}
+    </p>
+    <p>
+        Post Likes: {{ $post?->likes ?? 'not set' }}
+    </p>
+    <button wire:click.prevent="magic">
+        Magic
+    </button>
     <br>
     <br>
     <br>

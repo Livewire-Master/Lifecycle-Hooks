@@ -2,7 +2,9 @@
 
 namespace App\Livewire;
 
+use App\DataTransferObjects\Post\PostDto;
 use Exception;
+use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
 class LifeCycle extends Component
@@ -67,19 +69,36 @@ class LifeCycle extends Component
     public int $boot_calls = 0;
 
     /**
+     * Target Post DTO
+     *
+     * @var PostDto|array $post
+     */
+    public $post;
+
+    /**
      * Mount the component
      *
-     * @param string|null $uuid
+     * @param string|null $uuidOrTitle
+     * @param string|null $caption
      *
      * @return void
      */
-    public function mount(string $uuid = null): void
+    public function mount(string $uuidOrTitle = null, string $caption = null): void
     {
         // on component creation
         // executes only 1 time
         $this->creation_time = time();
         $this->mount_calls++;
-        $this->uuid = $uuid;
+
+        if (Route::is('page.uuid'))
+        {
+            $this->uuid = $uuidOrTitle;
+        }
+        else if (Route::is('page.post'))
+        {
+            // Initial Request
+            $this->post = new PostDto($uuidOrTitle, $caption, 0);
+        }
     }
 
     /**
@@ -162,5 +181,40 @@ class LifeCycle extends Component
     public function updatedEmail(): void
     {
         $this->email = trim(strtolower($this->email));
+    }
+
+    /**
+     * Hydrate Data
+     *
+     * @return void
+     */
+    public function hydrate(): void
+    {
+        // Runs at the beginning of every "subsequent" request.
+        $this->post = PostDto::fromArray($this->post);
+    }
+
+    /**
+     * Dehydrate the data
+     *
+     * This method is called at the end of every single request
+     * to convert the "post" property to an array.
+     *
+     * @return void
+     */
+    public function dehydrate(): void
+    {
+        // Runs at the end of every single request.
+        $this->post = $this->post->toArray();
+    }
+
+    /**
+     * Do some magic
+     *
+     * @return void
+     */
+    public function magic(): void
+    {
+        $this->post->like();
     }
 }
