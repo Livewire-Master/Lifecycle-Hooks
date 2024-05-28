@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\DataTransferObjects\Post\PostDto;
 use Exception;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
@@ -216,5 +217,37 @@ class LifeCycle extends Component
     public function magic(): void
     {
         $this->post->like();
+    }
+
+    /**
+     * Rendering Hook
+     *
+     * @param View  $view The view about to be rendered
+     * @param array $data The data provided to the view
+     *
+     * @return void
+     */
+    public function rendering(View $view, array $data): void
+    {
+        // Runs BEFORE the provided view is rendered...
+        //
+        // $view: The view about to be rendered
+        // $data: The data provided to the view
+    }
+
+    /**
+     * Rendered Hook
+     *
+     * @param View   $view The rendered view.
+     * @param string $html The final, rendered HTML.
+     *
+     * @return void
+     */
+    public function rendered(View $view, string $html): void
+    {
+        // Runs AFTER the provided view is rendered...
+        //
+        // $view: The rendered view
+        // $html: The final, rendered HTML
     }
 }
