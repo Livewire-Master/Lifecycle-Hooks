@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\DataTransferObjects\Post\PostDto;
 use App\Models\User;
+use App\Traits\WithUserInfo;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\QueryException;
@@ -12,6 +13,8 @@ use Livewire\Component;
 
 class LifeCycle extends Component
 {
+    use WithUserInfo;
+
     /**
      * Creation Time
      *
@@ -27,18 +30,14 @@ class LifeCycle extends Component
     public int $mount_calls = 0;
 
     /**
-     * Route Param UUID
+     * User ID
      *
-     * @var ?string
-     */
-    public ?string $uuid;
-
-    /**
-     * Last boot Time
+     * @note NOT-LOCKED for educational purpose.
+     * WE SHOULD #[Locked] attribute in real applications.
      *
      * @var int
      */
-    public int $boot_time;
+    public int $user_id = 1;
 
     /**
      * Username
@@ -55,14 +54,18 @@ class LifeCycle extends Component
     public string $email = '';
 
     /**
-     * User ID
+     * Route Param UUID
      *
-     * @note NOT-LOCKED for educational purpose.
-     * WE SHOULD #[Locked] attribute in real applications.
+     * @var ?string
+     */
+    public ?string $uuid;
+
+    /**
+     * Last boot Time
      *
      * @var int
      */
-    public int $user_id = 1;
+    public int $boot_time;
 
     /**
      * Boot function execution count
@@ -140,75 +143,6 @@ class LifeCycle extends Component
 
         $this->boot_time = time();
         $this->boot_calls++;
-    }
-
-    /**
-     * Updating Hook
-     *
-     * @param string $property
-     * @param mixed  $value
-     *
-     * @throws Exception
-     */
-    public function updating(string $property, mixed $value): void
-    {
-        if ($property === 'user_id')
-        {
-            throw new Exception('You can not change User ID');
-        }
-
-        if ($property === 'username' && strlen($value) <= 3)
-        {
-            $this->addError('username', 'Username must be at least 3 characters long');
-        }
-        else
-        {
-            $this->resetErrorBag('username');
-        }
-    }
-
-    /**
-     * Updated Hook
-     *
-     * @param string $property
-     *
-     * @return void
-     */
-    public function updated(string $property): void
-    {
-        if ($property === 'username')
-        {
-            $this->username = trim(strtoupper($this->username));
-        }
-    }
-
-    /**
-     * Updating Email Property
-     *
-     * @param mixed $value
-     *
-     * @return void
-     */
-    public function updatingEmail(mixed $value): void
-    {
-        if (strlen($value) <= 3)
-        {
-            $this->addError('email', 'Email must be at least 3 characters long');
-        }
-        else
-        {
-            $this->resetErrorBag('email');
-        }
-    }
-
-    /**
-     * Updated Email Property
-     *
-     * @return void
-     */
-    public function updatedEmail(): void
-    {
-        $this->email = trim(strtolower($this->email));
     }
 
     /**
