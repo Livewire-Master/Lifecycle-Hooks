@@ -3,8 +3,10 @@
 namespace App\Livewire;
 
 use App\DataTransferObjects\Post\PostDto;
+use App\Models\User;
 use Exception;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
@@ -77,6 +79,27 @@ class LifeCycle extends Component
     public $post;
 
     /**
+     * Exception View
+     *
+     * @var bool
+     */
+    public bool $exception_view = true;
+
+    /**
+     * Exception Status
+     *
+     * @var bool
+     */
+    public bool $has_exception = false;
+
+    /**
+     * Exception Message
+     *
+     * @var string
+     */
+    public string $exception_message = '';
+
+    /**
      * Mount the component
      *
      * @param string|null $uuidOrTitle
@@ -91,7 +114,11 @@ class LifeCycle extends Component
         $this->creation_time = time();
         $this->mount_calls++;
 
-        if (Route::is('page.uuid'))
+        if (Route::is('page.exception'))
+        {
+            User::find(999);
+        }
+        else if (Route::is('page.uuid'))
         {
             $this->uuid = $uuidOrTitle;
         }
@@ -252,5 +279,24 @@ class LifeCycle extends Component
         //
         // $view: The rendered view
         // $html: The final, rendered HTML
+    }
+
+    /**
+     * Exception Handler
+     *
+     * @param Exception $e               The exception object
+     * @param callable  $stopPropagation A flag indicating whether to stop event propagation
+     *
+     * @return void
+     */
+    public function exception(Exception $e, callable $stopPropagation): void
+    {
+        if ($e instanceof QueryException)
+        {
+            $this->exception_view    = false;
+            $this->has_exception     = true;
+            $this->exception_message = $e->getMessage();
+            $stopPropagation();
+        }
     }
 }
